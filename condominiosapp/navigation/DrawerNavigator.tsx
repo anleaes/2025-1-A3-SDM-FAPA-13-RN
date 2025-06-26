@@ -14,6 +14,11 @@ import BlockScreen from '../screens/blocks/BlockScreen';
 import CreateBlockScreen from '../screens/blocks/CreateBlockScreen';
 import EditBlockScreen from '../screens/blocks/EditBlockScreen';
 
+// Apartments
+import ApartmentScreen from '../screens/apartments/ApartmentScreen';
+import CreateApartmentScreen from '../screens/apartments/CreateApartmentScreen';
+import EditApartmentScreen from '../screens/apartments/EditApartmentScreen';
+
 export type DrawerParamList = {
     Home: undefined;
     Condominios: undefined;
@@ -27,6 +32,16 @@ export type DrawerParamList = {
         numero: number;
         qtd_apartamentos: number;
         condominio: number;
+    };
+    Apartments: undefined;
+    CreateApartment: undefined;
+    EditApartment: {
+        id: number;
+        numero: string;
+        andar: number;
+        metragem: number;
+        vagas_garagem: number;
+        bloco: number;
     };
 };
 
@@ -97,6 +112,28 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Bloco' }}
             />
             {/* End Blocks */}
+            {/* Apartments */}
+            <Drawer.Screen
+                name="Apartments"
+                component={ApartmentScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="home-outline" size={size} color={color} />,
+                    title: 'Apartamentos',
+                }}
+            />
+
+            <Drawer.Screen
+                name="CreateApartment"
+                component={CreateApartmentScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Apartamento' }}
+            />
+
+            <Drawer.Screen
+                name="EditApartment"
+                component={EditApartmentScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Apartamento' }}
+            />
+            {/* End Apartments */}
         </Drawer.Navigator>
     );
 };
