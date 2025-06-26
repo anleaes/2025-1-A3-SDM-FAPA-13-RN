@@ -44,6 +44,11 @@ import MaintenancesScreen from '../screens/maintenances/MaintenancesScreen';
 import CreateMaintenanceScreen from '../screens/maintenances/CreateMaintenanceScreen';
 import EditMaintenanceScreen from '../screens/maintenances/EditMaintenanceScreen';
 
+// Events
+import EventsScreen from '../screens/events/EventsScreen';
+import CreateEventScreen from '../screens/events/CreateEventScreen';
+import EditEventScreen from '../screens/events/EditEventScreen';
+
 export type DrawerParamList = {
     Home: undefined;
     Condominiums: undefined;
@@ -112,9 +117,20 @@ export type DrawerParamList = {
     EditMaintenance: {
         id: number;
         description: string;
-        maintenanceDate: string;
+        date: string;
         status: string;
+        cost: number;
         condominium: number;
+    };
+    Events: undefined;
+    CreateEvent: undefined;
+    EditEvent: {
+        id: number;
+        name: string;
+        location: string;
+        date: string;
+        time: string;
+        resident: number;
     };
 };
 
@@ -314,6 +330,28 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Manutenção' }}
             />
             {/* End Maintenances */}
+
+            <Drawer.Screen
+                name="Events"
+                component={EventsScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
+                    title: 'Eventos',
+                }}
+            />
+
+            <Drawer.Screen
+                name="CreateEvent"
+                component={CreateEventScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Evento' }}
+            />
+
+            <Drawer.Screen
+                name="EditEvent"
+                component={EditEventScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Evento' }}
+            />
+
         </Drawer.Navigator>
     );
 };
