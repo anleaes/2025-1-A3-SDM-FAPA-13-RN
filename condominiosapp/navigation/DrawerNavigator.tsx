@@ -27,9 +27,9 @@ import EditResidentScreen from '../screens/residents/EditResidentScreen';
 
 export type DrawerParamList = {
     Home: undefined;
-    Condominios: undefined;
-    CreateCondominio: undefined;
-    EditCondominio: { id: number, nome: string, endereco: string, cnpj: string, quantidade_blocos: number };
+    Condominiums: undefined;
+    CreateCondominium: undefined;
+    EditCondominium: { id: number, nome: string, endereco: string, cnpj: string, quantidade_blocos: number };
     Blocks: undefined;
     CreateBlock: undefined;
     EditBlock: {
@@ -85,10 +85,9 @@ const DrawerNavigator = () => {
                 }}
             />
 
-
             {/* Condominiums */}
             <Drawer.Screen
-                name="Condominios"
+                name="Condominiums"
                 component={CondominiumScreen}
                 options={{
                     drawerIcon: ({ color, size }) => <Ionicons name="business" size={size} color={color} />,
@@ -96,12 +95,12 @@ const DrawerNavigator = () => {
                 }}
             />
             <Drawer.Screen
-                name="CreateCondominio"
+                name="CreateCondominium"
                 component={CreateCondominiumScreen}
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Condomínio' }}
             />
             <Drawer.Screen
-                name="EditCondominio"
+                name="EditCondominium"
                 component={EditCondominiumScreen}
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Condomínio' }}
             />
@@ -156,20 +155,20 @@ const DrawerNavigator = () => {
                 component={ResidentScreen}
                 options={{
                     drawerIcon: ({ color, size }) => <Ionicons name="people" size={size} color={color} />,
-                    title: 'Residents',
+                    title: 'Moradores',
                 }}
             />
 
             <Drawer.Screen
                 name="CreateResident"
                 component={CreateResidentScreen}
-                options={{ drawerItemStyle: { display: 'none' }, title: 'New Resident' }}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Morador' }}
             />
 
             <Drawer.Screen
                 name="EditResident"
                 component={EditResidentScreen}
-                options={{ drawerItemStyle: { display: 'none' }, title: 'Edit Resident' }}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Morador' }}
             />
             {/* End Residents */}
         </Drawer.Navigator>
