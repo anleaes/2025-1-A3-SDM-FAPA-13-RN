@@ -24,6 +24,11 @@ import ResidentScreen from '../screens/residents/ResidentScreen';
 import CreateResidentScreen from '../screens/residents/CreateResidentScreen';
 import EditResidentScreen from '../screens/residents/EditResidentScreen';
 
+// Employees
+import EmployeeScreen from '../screens/employees/EmployeeScreen';
+import CreateEmployeeScreen from '../screens/employees/CreateEmployeeScreen';
+import EditEmployeeScreen from '../screens/employees/EditEmployeeScreen';
+
 
 export type DrawerParamList = {
     Home: undefined;
@@ -58,6 +63,16 @@ export type DrawerParamList = {
         phone: string;
         email: string;
         apartment: number;
+    };
+    Employees: undefined;
+    CreateEmployee: undefined;
+    EditEmployee: {
+        id: number;
+        name: string;
+        role: string;
+        salary: string;
+        shift: string;
+        condominium: number;
     };
 };
 
@@ -171,6 +186,28 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Morador' }}
             />
             {/* End Residents */}
+            {/* Employees */}
+            <Drawer.Screen
+                name="Employees"
+                component={EmployeeScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="construct-outline" size={size} color={color} />,
+                    title: 'Funcionários',
+                }}
+            />
+
+            <Drawer.Screen
+                name="CreateEmployee"
+                component={CreateEmployeeScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Funcionário' }}
+            />
+
+            <Drawer.Screen
+                name="EditEmployee"
+                component={EditEmployeeScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Funcionário' }}
+            />
+            {/* End Employees */}
         </Drawer.Navigator>
     );
 };
