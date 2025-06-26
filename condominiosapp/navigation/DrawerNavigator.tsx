@@ -39,7 +39,10 @@ import CommonAreaReservationsScreen from '../screens/commonareareservations/Comm
 import CreateCommonAreaReservationScreen from '../screens/commonareareservations/CreateCommonAreaReservationScreen';
 import EditCommonAreaReservationScreen from '../screens/commonareareservations/EditCommonAreaReservationScreen';
 
-
+// Maintenances
+import MaintenancesScreen from '../screens/maintenances/MaintenancesScreen';
+import CreateMaintenanceScreen from '../screens/maintenances/CreateMaintenanceScreen';
+import EditMaintenanceScreen from '../screens/maintenances/EditMaintenanceScreen';
 
 export type DrawerParamList = {
     Home: undefined;
@@ -103,6 +106,15 @@ export type DrawerParamList = {
         status: string;
         resident: number;
         commonArea: number;
+    };
+    Maintenances: undefined;
+    CreateMaintenance: undefined;
+    EditMaintenance: {
+        id: number;
+        description: string;
+        maintenanceDate: string;
+        status: string;
+        condominium: number;
     };
 };
 
@@ -280,6 +292,28 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Reserva' }}
             />
             {/* End Common Areas Reservations */}
+            {/* Maintenances */}
+            <Drawer.Screen
+                name="Maintenances"
+                component={MaintenancesScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="hammer-outline" size={size} color={color} />,
+                    title: 'Manutenções',
+                }}
+            />
+
+            <Drawer.Screen
+                name="CreateMaintenance"
+                component={CreateMaintenanceScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Nova Manutenção' }}
+            />
+
+            <Drawer.Screen
+                name="EditMaintenance"
+                component={EditMaintenanceScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Manutenção' }}
+            />
+            {/* End Maintenances */}
         </Drawer.Navigator>
     );
 };
