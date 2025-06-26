@@ -29,6 +29,11 @@ import EmployeeScreen from '../screens/employees/EmployeeScreen';
 import CreateEmployeeScreen from '../screens/employees/CreateEmployeeScreen';
 import EditEmployeeScreen from '../screens/employees/EditEmployeeScreen';
 
+// Common Areas
+import CommonAreasScreen from '../screens/commonareas/CommonAreasScreen';
+import CreateCommonAreaScreen from '../screens/commonareas/CreateCommonAreaScreen';
+import EditCommonAreaScreen from '../screens/commonareas/EditCommonAreaScreen';
+
 
 export type DrawerParamList = {
     Home: undefined;
@@ -72,6 +77,16 @@ export type DrawerParamList = {
         role: string;
         salary: string;
         shift: string;
+        condominium: number;
+    };
+    CommonAreas: undefined;
+    CreateCommonArea: undefined;
+    EditCommonArea: {
+        id: number;
+        name: string;
+        capacity: number;
+        openingTime: string;
+        closingTime: string;
         condominium: number;
     };
 };
@@ -208,6 +223,27 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Funcionário' }}
             />
             {/* End Employees */}
+            {/* Common Areas */}
+            <Drawer.Screen
+                name="CommonAreas"
+                component={CommonAreasScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="grid-outline" size={size} color={color} />,
+                    title: 'Áreas Comuns',
+                }}
+            />
+            <Drawer.Screen
+                name="CreateCommonArea"
+                component={CreateCommonAreaScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Nova Área Comum' }}
+            />
+            <Drawer.Screen
+                name="EditCommonArea"
+                component={EditCommonAreaScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Área Comum' }}
+            />
+            {/* End Common Areas */}
+
         </Drawer.Navigator>
     );
 };
