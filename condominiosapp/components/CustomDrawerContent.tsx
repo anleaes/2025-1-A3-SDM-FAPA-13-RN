@@ -6,7 +6,6 @@ const CustomDrawerContent = (props: any) => {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
       <View style={styles.container}>
-        {/* Adicione aqui outros elementos customizados se necessário */}
         <DrawerItemList {...props} />
       </View>
     </DrawerContentScrollView>
