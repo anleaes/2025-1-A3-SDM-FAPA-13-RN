@@ -55,7 +55,6 @@ const BlockScreen = ({ navigation }: Props) => {
             <Text style={styles.name}>{item.nome}</Text>
             <Text style={styles.description}>Apartamentos: {item.qtd_apartamentos}</Text>
             <Text style={styles.description}>Condomínio ID: {item.condominio}</Text>
-
             <View style={styles.row}>
                 <TouchableOpacity
                     style={styles.editButton}
@@ -97,19 +96,59 @@ const BlockScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#fff', padding: 16 },
-    title: { fontSize: 22, fontWeight: 'bold', alignSelf: 'center', marginBottom: 12 },
-    card: { backgroundColor: '#f0f4ff', padding: 16, borderRadius: 10, marginBottom: 12 },
-    name: { fontSize: 18, fontWeight: '600' },
-    description: { fontSize: 14, color: '#666', marginTop: 4 },
-    row: { flexDirection: 'row', marginTop: 12 },
-    editButton: { backgroundColor: '#4B7BE5', padding: 8, borderRadius: 6, marginRight: 8 },
-    deleteButton: { backgroundColor: '#E54848', padding: 8, borderRadius: 6 },
-    editText: { color: '#fff', fontWeight: '500' },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff',
+        padding: 16,
+    },
+    title: {
+        fontSize: 22,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        marginBottom: 12,
+    },
+    card: {
+        backgroundColor: '#f0f4ff',
+        padding: 16,
+        borderRadius: 10,
+        marginBottom: 12,
+    },
+    name: {
+        fontSize: 18,
+        fontWeight: '600',
+    },
+    description: {
+        fontSize: 14,
+        color: '#666',
+        marginTop: 4,
+    },
+    row: {
+        flexDirection: 'row',
+        marginTop: 12,
+    },
+    editButton: {
+        backgroundColor: '#4B7BE5',
+        padding: 8,
+        borderRadius: 6,
+        marginRight: 8,
+    },
+    deleteButton: {
+        backgroundColor: '#E54848',
+        padding: 8,
+        borderRadius: 6,
+    },
+    editText: {
+        color: '#fff',
+        fontWeight: '500',
+    },
     fab: {
-        position: 'absolute', right: 20, bottom: 20,
-        backgroundColor: '#0D47A1', borderRadius: 28,
-        padding: 14, elevation: 4
+        position: 'absolute',
+        right: 20,
+        bottom: 20,
+        backgroundColor: '#0D47A1',
+        borderRadius: 28,
+        padding: 14,
+        elevation: 4,
     },
 });
 

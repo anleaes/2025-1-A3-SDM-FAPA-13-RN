@@ -91,29 +91,29 @@ const EditApartmentScreen = ({ route, navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 16,
-        backgroundColor: '#fff'
-    },
-    title: { 
-        fontSize: 20, 
-        fontWeight: 'bold', 
-        marginBottom: 12, 
-        alignSelf: 'center' 
-    },
-    label: { 
-        fontWeight: '600', 
-        marginTop: 12, 
-        marginBottom: 4 
-    },
-    input: { 
-        borderWidth: 1, 
-        borderColor: '#ccc', 
-        borderRadius: 8, 
-        padding: 10, 
-        marginBottom: 10
-    },
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#fff',
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 12,
+    alignSelf: 'center',
+  },
+  label: {
+    fontWeight: '600',
+    marginTop: 12,
+    marginBottom: 4,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    padding: 10,
+    marginBottom: 10,
+  },
 });
 
 export default EditApartmentScreen;

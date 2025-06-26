@@ -5,7 +5,8 @@ import { Image, StyleSheet, Text, View } from 'react-native';
 const CustomDrawerContent = (props: any) => {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={{ flex: 1 }}>
-      <View style={{ flex: 1, paddingTop: 10 }}>
+      <View style={styles.container}>
+        {/* Adicione aqui outros elementos customizados se necessário */}
         <DrawerItemList {...props} />
       </View>
     </DrawerContentScrollView>
@@ -13,6 +14,10 @@ const CustomDrawerContent = (props: any) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 10,
+  },
   header: {
     padding: 20,
     backgroundColor: '#4B7BE5',
