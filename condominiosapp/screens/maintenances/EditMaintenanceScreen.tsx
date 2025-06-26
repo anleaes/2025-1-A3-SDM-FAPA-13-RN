@@ -24,10 +24,10 @@ type Maintenance = {
 };
 
 const EditMaintenanceScreen = ({ route, navigation }: Props) => {
-  const { id, description, maintenanceDate, status, cost, condominium } = route.params as any;
+  const { id, description, date, status, cost, condominium } = route.params as Maintenance;
 
   const [descriptionState, setDescription] = useState(description);
-  const [dateState, setDate] = useState(maintenanceDate || '');
+  const [dateState, setDate] = useState(date || '');
   const [statusValue, setStatusValue] = useState(status);
   const [costState, setCost] = useState(cost ? String(cost) : '');
   const [condominiumId, setCondominiumId] = useState<number | null>(condominium);

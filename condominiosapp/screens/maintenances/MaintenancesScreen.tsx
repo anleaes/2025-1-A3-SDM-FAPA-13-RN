@@ -68,10 +68,7 @@ const MaintenancesScreen = ({ navigation }: Props) => {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() => navigation.navigate('EditMaintenance', {
-            ...item,
-            maintenanceDate: item.date,
-          })}
+          onPress={() => navigation.navigate('EditMaintenance', item)}
         >
           <Text style={styles.editText}>Editar</Text>
         </TouchableOpacity>
