@@ -24,11 +24,16 @@ const CreateResidentScreen = ({ navigation }: Props) => {
 
     const fetchApartments = async () => {
         try {
-            const res = await fetch(`${API_BASE_URL}/moradores/`, {
+            const res = await fetch(`${API_BASE_URL}/apartamentos/`, {
                 headers: { Authorization: `Token ${API_TOKEN}` },
             });
             const data = await res.json();
-            setApartments(data);
+            setApartments(
+                data.map((item: any) => ({
+                    id: item.id,
+                    number: item.numero,
+                }))
+            );
         } catch (error) {
             Alert.alert('Error', 'Failed to load apartments.');
         } finally {
@@ -73,19 +78,22 @@ const CreateResidentScreen = ({ navigation }: Props) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>New Resident</Text>
-            <TextInput placeholder="Name" style={styles.input} value={name} onChangeText={setName} />
-            <TextInput placeholder="Phone" style={styles.input} value={phone} onChangeText={setPhone} />
+            <Text style={styles.title}>Novo Morador</Text>
+            <Text style={styles.label}>Nome</Text>
+            <TextInput placeholder="Nome" style={styles.input} value={name} onChangeText={setName} />
+            <Text style={styles.label}>Telefone</Text>
+            <TextInput placeholder="Telefone" style={styles.input} value={phone} onChangeText={setPhone} />
+            <Text style={styles.label}>Email</Text>
             <TextInput placeholder="Email" style={styles.input} value={email} onChangeText={setEmail} />
+            <Text style={styles.label}>CPF</Text>
             <TextInput placeholder="CPF" style={styles.input} value={cpf} onChangeText={setCpf} />
-
-            <Text style={styles.label}>Apartment</Text>
+            <Text style={styles.label}>Apartamento</Text>
             <Picker
                 selectedValue={apartmentId}
                 onValueChange={(itemValue) => setApartmentId(itemValue)}
                 style={styles.input}
             >
-                <Picker.Item label="Select..." value={null} />
+                <Picker.Item label="Selecione..." value={null} />
                 {apartments.map(a => (
                     <Picker.Item key={a.id} label={`Apt ${a.number}`} value={a.id} />
                 ))}

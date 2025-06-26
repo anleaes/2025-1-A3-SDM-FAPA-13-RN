@@ -31,6 +31,7 @@ const BlockScreen = ({ navigation }: Props) => {
             },
         });
         const data = await response.json();
+        console.log(data)
         setBlocks(data);
         setLoading(false);
     };

@@ -14,6 +14,7 @@ type Condominio = {
 
 const CreateBlockScreen = ({ navigation }: Props) => {
 
+  const [nome, setNome] = useState('');
   const [numero, setNumero] = useState('');
   const [qtdApartamentos, setQtdApartamentos] = useState('');
   const [condominioId, setCondominioId] = useState<number | null>(null);
@@ -47,6 +48,7 @@ const CreateBlockScreen = ({ navigation }: Props) => {
         'Authorization': `Token ${API_TOKEN}`,
       },
       body: JSON.stringify({
+        nome,
         numero: Number(numero),
         qtd_apartamentos: Number(qtdApartamentos),
         condominio: condominioId
@@ -60,8 +62,12 @@ const CreateBlockScreen = ({ navigation }: Props) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Novo Block</Text>
+      <Text style={styles.title}>Novo Bloco</Text>
+      <Text style={styles.label}>Nome do Bloco</Text>
+      <TextInput placeholder="Nome" style={styles.input} value={nome} onChangeText={setNome} />
+      <Text style={styles.label}>Número</Text>
       <TextInput placeholder="Número" style={styles.input} keyboardType="numeric" value={numero} onChangeText={setNumero} />
+      <Text style={styles.label}>Qtd. Apartamentos</Text>
       <TextInput placeholder="Qtd. Apartamentos" style={styles.input} keyboardType="numeric" value={qtdApartamentos} onChangeText={setQtdApartamentos} />
 
       <Text style={styles.label}>Condomínio</Text>
