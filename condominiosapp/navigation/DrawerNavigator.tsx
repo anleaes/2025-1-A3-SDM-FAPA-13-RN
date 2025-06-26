@@ -19,6 +19,12 @@ import ApartmentScreen from '../screens/apartments/ApartmentScreen';
 import CreateApartmentScreen from '../screens/apartments/CreateApartmentScreen';
 import EditApartmentScreen from '../screens/apartments/EditApartmentScreen';
 
+// Residents
+import ResidentScreen from '../screens/residents/ResidentScreen';
+import CreateResidentScreen from '../screens/residents/CreateResidentScreen';
+import EditResidentScreen from '../screens/residents/EditResidentScreen';
+
+
 export type DrawerParamList = {
     Home: undefined;
     Condominios: undefined;
@@ -42,6 +48,16 @@ export type DrawerParamList = {
         metragem: number;
         vagas_garagem: number;
         bloco: number;
+    };
+    Residents: undefined;
+    CreateResident: undefined;
+    EditResident: {
+        id: number;
+        name: string;
+        cpf: string;
+        phone: string;
+        email: string;
+        apartment: number;
     };
 };
 
@@ -134,6 +150,28 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Apartamento' }}
             />
             {/* End Apartments */}
+            {/* Residents */}
+            <Drawer.Screen
+                name="Residents"
+                component={ResidentScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="people" size={size} color={color} />,
+                    title: 'Residents',
+                }}
+            />
+
+            <Drawer.Screen
+                name="CreateResident"
+                component={CreateResidentScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'New Resident' }}
+            />
+
+            <Drawer.Screen
+                name="EditResident"
+                component={EditResidentScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Edit Resident' }}
+            />
+            {/* End Residents */}
         </Drawer.Navigator>
     );
 };
