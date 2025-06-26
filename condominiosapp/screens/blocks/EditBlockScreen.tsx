@@ -51,6 +51,13 @@ const EditBlockScreen = ({ route, navigation }: Props) => {
     fetchCondominios();
   }, []);
 
+  useEffect(() => {
+    setNome(route.params.nome);
+    setNumero(String(route.params.numero));
+    setQtdApartamentos(String(route.params.qtd_apartamentos));
+    setCondominioId(route.params.condominio);
+  }, [route.params]);
+
   const handleSave = async () => {
     setSaving(true);
     await fetch(`${API_BASE_URL}/blocos/${id}/`, {

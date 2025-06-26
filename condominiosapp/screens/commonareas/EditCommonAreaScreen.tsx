@@ -41,6 +41,14 @@ const EditCommonAreaScreen = ({ route, navigation }: Props) => {
     fetchCondominiums();
   }, []);
 
+  useEffect(() => {
+    setName(route.params.name);
+    setCapacity(String(route.params.capacity));
+    setOpening(route.params.openingTime);
+    setClosing(route.params.closingTime);
+    setCondominiumId(route.params.condominium);
+  }, [route.params]);
+
   const handleSave = async () => {
     setSaving(true);
     await fetch(`${API_BASE_URL}/areascomuns/${id}/`, {

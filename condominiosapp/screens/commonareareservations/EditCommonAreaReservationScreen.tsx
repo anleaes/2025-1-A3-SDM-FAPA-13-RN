@@ -55,6 +55,13 @@ const EditCommonAreaReservationScreen = ({ route, navigation }: Props) => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setDate(route.params.reservationDate);
+    setCurrentStatus(route.params.status);
+    setResidentId(route.params.resident);
+    setCommonAreaId(route.params.commonArea);
+  }, [route.params]);
+
   const handleSave = async () => {
     setSaving(true);
     await fetch(`${API_BASE_URL}/reservas/${id}/`, {

@@ -47,6 +47,14 @@ const EditResidentScreen = ({ route, navigation }: Props) => {
         fetchApartments();
     }, []);
 
+    useEffect(() => {
+        setName(route.params.name);
+        setCpf(route.params.cpf);
+        setPhone(route.params.phone);
+        setEmail(route.params.email);
+        setApartmentId(route.params.apartment);
+    }, [route.params]);
+
     const handleSave = async () => {
         if (!name || !phone || !email || !apartmentId) {
             Alert.alert('Validation', 'Please fill all fields.');
