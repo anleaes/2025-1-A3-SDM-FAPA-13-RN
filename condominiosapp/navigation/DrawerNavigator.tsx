@@ -34,6 +34,12 @@ import CommonAreasScreen from '../screens/commonareas/CommonAreasScreen';
 import CreateCommonAreaScreen from '../screens/commonareas/CreateCommonAreaScreen';
 import EditCommonAreaScreen from '../screens/commonareas/EditCommonAreaScreen';
 
+// Common Areas Reservations
+import CommonAreaReservationsScreen from '../screens/commonareareservations/CommonAreaReservationsScreen';
+import CreateCommonAreaReservationScreen from '../screens/commonareareservations/CreateCommonAreaReservationScreen';
+import EditCommonAreaReservationScreen from '../screens/commonareareservations/EditCommonAreaReservationScreen';
+
+
 
 export type DrawerParamList = {
     Home: undefined;
@@ -88,6 +94,15 @@ export type DrawerParamList = {
         openingTime: string;
         closingTime: string;
         condominium: number;
+    };
+    CommonAreaReservations: undefined;
+    CreateCommonAreaReservation: undefined;
+    EditCommonAreaReservation: {
+        id: number;
+        reservationDate: string;
+        status: string;
+        resident: number;
+        commonArea: number;
     };
 };
 
@@ -243,7 +258,28 @@ const DrawerNavigator = () => {
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Área Comum' }}
             />
             {/* End Common Areas */}
+            {/* Common Areas Reservations */}
+            <Drawer.Screen
+                name="CommonAreaReservations"
+                component={CommonAreaReservationsScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="calendar-outline" size={size} color={color} />,
+                    title: 'Reservas Áreas Comuns',
+                }}
+            />
 
+            <Drawer.Screen
+                name="CreateCommonAreaReservation"
+                component={CreateCommonAreaReservationScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Nova Reserva' }}
+            />
+
+            <Drawer.Screen
+                name="EditCommonAreaReservation"
+                component={EditCommonAreaReservationScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Reserva' }}
+            />
+            {/* End Common Areas Reservations */}
         </Drawer.Navigator>
     );
 };
