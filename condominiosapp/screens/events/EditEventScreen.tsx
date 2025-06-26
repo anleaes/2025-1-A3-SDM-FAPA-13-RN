@@ -41,6 +41,14 @@ const EditEventScreen = ({ route, navigation }: Props) => {
     fetchResidents();
   }, []);
 
+  useEffect(() => {
+    setName(route.params.name);
+    setLocation(route.params.location);
+    setDate(route.params.date);
+    setTime(route.params.time);
+    setResidentId(route.params.resident);
+  }, [route.params]);
+
   const handleSave = async () => {
     setSaving(true);
     await fetch(`${API_BASE_URL}/eventos/${id}/`, {

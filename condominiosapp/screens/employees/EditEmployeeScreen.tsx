@@ -49,6 +49,14 @@ const EditEmployeeScreen = ({ route, navigation }: Props) => {
     fetchCondominiums();
   }, []);
 
+  useEffect(() => {
+    setName(route.params.name);
+    setRole(route.params.role);
+    setSalary(route.params.salary);
+    setShift(route.params.shift);
+    setCondominiumId(route.params.condominium);
+  }, [route.params]);
+
   const handleSave = async () => {
     setSaving(true);
     await fetch(`${API_BASE_URL}/funcionarios/${id}/`, {

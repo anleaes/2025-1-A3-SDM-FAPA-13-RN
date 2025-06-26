@@ -42,6 +42,14 @@ const EditApartmentScreen = ({ route, navigation }: Props) => {
         fetchBlocos();
     }, []);
 
+    useEffect(() => {
+        setNumero(route.params.numero);
+        setAndar(String(route.params.andar));
+        setMetragem(String(route.params.metragem));
+        setVagasGaragem(String(route.params.vagas_garagem));
+        setBlocoId(route.params.bloco);
+    }, [route.params]);
+
     const handleSave = async () => {
         setSaving(true);
         await fetch(`${API_BASE_URL}/apartamentos/${id}/`, {

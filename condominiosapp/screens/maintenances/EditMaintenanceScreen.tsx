@@ -52,6 +52,14 @@ const EditMaintenanceScreen = ({ route, navigation }: Props) => {
     fetchCondominiums();
   }, []);
 
+  useEffect(() => {
+    setDescription(route.params.description);
+    setDate(route.params.date);
+    setStatusValue(route.params.status);
+    setCost(String(route.params.cost));
+    setCondominiumId(route.params.condominium);
+  }, [route.params]);
+
   const handleSave = async () => {
     setSaving(true);
     await fetch(`${API_BASE_URL}/manutencoes/${id}/`, {

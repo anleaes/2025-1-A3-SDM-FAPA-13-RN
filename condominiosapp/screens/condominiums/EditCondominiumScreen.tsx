@@ -1,5 +1,5 @@
 import { DrawerScreenProps } from '@react-navigation/drawer';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, Button, StyleSheet, Text, TextInput, View } from 'react-native';
 import { DrawerParamList } from '../../navigation/DrawerNavigator';
 import { API_BASE_URL, API_TOKEN } from '../../apiConfig';
@@ -14,6 +14,13 @@ const EditCondominiumScreen = ({ route, navigation }: Props) => {
   const [cnpj, setCnpj] = useState(cnpjInit);
   const [blocksCount, setBlocksCount] = useState(String(blocksCountInit));
   const [saving, setSaving] = useState(false);
+
+  useEffect(() => {
+    setName(route.params.nome);
+    setAddress(route.params.endereco);
+    setCnpj(route.params.cnpj);
+    setBlocksCount(String(route.params.quantidade_blocos));
+  }, [route.params]);
 
   const handleSave = async () => {
     setSaving(true);
