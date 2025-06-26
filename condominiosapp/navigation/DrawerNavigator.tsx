@@ -4,16 +4,30 @@ import React from 'react';
 import CustomDrawerContent from '../components/CustomDrawerContent';
 import HomeScreen from '../screens/HomeScreen';
 
-// Condominios
+// Condominiums
 import CondominiumScreen from '../screens/condominiums/CondominiumScreen';
 import CreateCondominiumScreen from '../screens/condominiums/CreateCondominiumScreen';
 import EditCondominiumScreen from '../screens/condominiums/EditCondominiumScreen';
+
+// Blocks
+import BlockScreen from '../screens/blocks/BlockScreen';
+import CreateBlockScreen from '../screens/blocks/CreateBlockScreen';
+import EditBlockScreen from '../screens/blocks/EditBlockScreen';
 
 export type DrawerParamList = {
     Home: undefined;
     Condominios: undefined;
     CreateCondominio: undefined;
     EditCondominio: { id: number, nome: string, endereco: string, cnpj: string, quantidade_blocos: number };
+    Blocks: undefined;
+    CreateBlock: undefined;
+    EditBlock: {
+        id: number;
+        nome: string;
+        numero: number;
+        qtd_apartamentos: number;
+        condominio: number;
+    };
 };
 
 const Drawer = createDrawerNavigator<DrawerParamList>();
@@ -39,6 +53,9 @@ const DrawerNavigator = () => {
                     title: 'Início',
                 }}
             />
+
+
+            {/* Condominiums */}
             <Drawer.Screen
                 name="Condominios"
                 component={CondominiumScreen}
@@ -47,18 +64,39 @@ const DrawerNavigator = () => {
                     title: 'Condomínios',
                 }}
             />
-
             <Drawer.Screen
                 name="CreateCondominio"
                 component={CreateCondominiumScreen}
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Condomínio' }}
             />
-
             <Drawer.Screen
                 name="EditCondominio"
                 component={EditCondominiumScreen}
                 options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Condomínio' }}
             />
+            {/* End Condominiums */}
+            {/* Blocks */}
+            <Drawer.Screen
+                name="Blocks"
+                component={BlockScreen}
+                options={{
+                    drawerIcon: ({ color, size }) => <Ionicons name="business-outline" size={size} color={color} />,
+                    title: 'Blocos',
+                }}
+            />
+
+            <Drawer.Screen
+                name="CreateBlock"
+                component={CreateBlockScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Novo Bloco' }}
+            />
+
+            <Drawer.Screen
+                name="EditBlock"
+                component={EditBlockScreen}
+                options={{ drawerItemStyle: { display: 'none' }, title: 'Editar Bloco' }}
+            />
+            {/* End Blocks */}
         </Drawer.Navigator>
     );
 };
