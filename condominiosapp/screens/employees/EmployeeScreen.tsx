@@ -1,7 +1,7 @@
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerParamList } from '../../navigation/DrawerNavigator';
 import { API_BASE_URL, API_TOKEN } from '../../apiConfig';
@@ -20,18 +20,34 @@ type Employee = {
 const EmployeeScreen = ({ navigation }: Props) => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
+  // Novos estados para filtros
+  const [nome, setNome] = useState('');
+  const [funcao, setFuncao] = useState('');
+  const [turno, setTurno] = useState('');
+  const [condominio, setCondominio] = useState('');
 
-  const fetchEmployees = async () => {
+  const fetchEmployees = async (params?: { nome?: string; funcao?: string; turno?: string; condominio?: string }) => {
     setLoading(true);
-    const response = await fetch(`${API_BASE_URL}/funcionarios/`, {
+    let url = `${API_BASE_URL}/funcionarios/`;
+    const query: string[] = [];
+    if (params) {
+      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
+      if (params.funcao) query.push(`funcao=${encodeURIComponent(params.funcao)}`);
+      if (params.turno) query.push(`turno=${encodeURIComponent(params.turno)}`);
+      if (params.condominio) query.push(`condominio=${encodeURIComponent(params.condominio)}`);
+    }
+    if (query.length > 0) {
+      url += '?' + query.join('&');
+    }
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Token ${API_TOKEN}`,
       },
     });
-    const data = await response.json();
-    setEmployees(data.map((item: any) => ({
+    const dataResp = await response.json();
+    setEmployees(dataResp.map((item: any) => ({
       id: item.id,
       name: item.nome,
       role: item.funcao,
@@ -55,6 +71,10 @@ const EmployeeScreen = ({ navigation }: Props) => {
       },
     });
     setEmployees(prev => prev.filter(e => e.id !== id));
+  };
+
+  const handleSearch = () => {
+    fetchEmployees({ nome, funcao, turno, condominio });
   };
 
   const renderItem = ({ item }: { item: Employee }) => (
@@ -84,6 +104,38 @@ const EmployeeScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Funcionários</Text>
+      {/* Campos de busca */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Nome"
+          value={nome}
+          onChangeText={setNome}
+        />
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Função"
+          value={funcao}
+          onChangeText={setFuncao}
+        />
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Turno"
+          value={turno}
+          onChangeText={setTurno}
+        />
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Condomínio (ID)"
+          value={condominio}
+          onChangeText={setCondominio}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Ionicons name="search" size={22} color="#fff" />
+        </TouchableOpacity>
+      </View>
       {loading ? (
         <ActivityIndicator size="large" color="#4B7BE5" />
       ) : (
@@ -158,6 +210,21 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     padding: 14,
     elevation: 4,
+  },
+  input: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    fontSize: 15,
+    marginRight: 4,
+  },
+  searchButton: {
+    backgroundColor: '#4B7BE5',
+    padding: 10,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

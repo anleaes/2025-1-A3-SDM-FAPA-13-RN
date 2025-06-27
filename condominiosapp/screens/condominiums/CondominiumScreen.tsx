@@ -1,7 +1,7 @@
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View, Alert } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View, Alert, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerParamList } from '../../navigation/DrawerNavigator';
 import { API_BASE_URL, API_TOKEN } from '../../apiConfig';
@@ -19,11 +19,22 @@ type Condominium = {
 const CondominiumScreen = ({ navigation }: Props) => {
   const [condominiums, setCondominiums] = useState<Condominium[]>([]);
   const [loading, setLoading] = useState(true);
+  const [nome, setNome] = useState('');
+  const [cnpj, setCnpj] = useState('');
 
-  const fetchCondominiums = async () => {
+  const fetchCondominiums = async (params?: { nome?: string; cnpj?: string }) => {
     setLoading(true);
+    let url = `${API_BASE_URL}/condominio/`;
+    const query: string[] = [];
+    if (params) {
+      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
+      if (params.cnpj) query.push(`cnpj=${encodeURIComponent(params.cnpj)}`);
+    }
+    if (query.length > 0) {
+      url += '?' + query.join('&');
+    }
     try {
-      const response = await fetch(`${API_BASE_URL}/condominio/`, {
+      const response = await fetch(url, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -66,6 +77,11 @@ const CondominiumScreen = ({ navigation }: Props) => {
     }
   };
 
+  const handleSearch = () => {
+    fetchCondominiums({ nome, cnpj });
+    Keyboard.dismiss();
+  };
+
   const renderItem = ({ item }: { item: Condominium }) => (
     <View style={styles.card}>
       <Text style={styles.name}>{item.name}</Text>
@@ -96,8 +112,26 @@ const CondominiumScreen = ({ navigation }: Props) => {
   );
 
   return (
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
     <View style={styles.container}>
       <Text style={styles.title}>Condomínios</Text>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nome"
+          value={nome}
+          onChangeText={setNome}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="CNPJ"
+          value={cnpj}
+          onChangeText={setCnpj}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Ionicons name="search" size={22} color="#fff" />
+        </TouchableOpacity>
+      </View>
       {loading ? (
         <ActivityIndicator size="large" color="#4B7BE5" />
       ) : (
@@ -115,6 +149,7 @@ const CondominiumScreen = ({ navigation }: Props) => {
         <Ionicons name="add" size={28} color="#fff" />
       </TouchableOpacity>
     </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -172,6 +207,28 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     padding: 14,
     elevation: 4,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    gap: 6,
+  },
+  input: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    fontSize: 15,
+    marginRight: 4,
+  },
+  searchButton: {
+    backgroundColor: '#4B7BE5',
+    padding: 10,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

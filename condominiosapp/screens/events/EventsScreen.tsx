@@ -1,7 +1,7 @@
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerParamList } from '../../navigation/DrawerNavigator';
 import { API_BASE_URL, API_TOKEN } from '../../apiConfig';
@@ -20,18 +20,34 @@ type Event = {
 const EventsScreen = ({ navigation }: Props) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
+  // Novos estados para filtros
+  const [nome, setNome] = useState('');
+  const [local, setLocal] = useState('');
+  const [data, setData] = useState('');
+  const [morador, setMorador] = useState('');
 
-  const fetchEvents = async () => {
+  const fetchEvents = async (params?: { nome?: string; local?: string; data?: string; morador?: string }) => {
     setLoading(true);
-    const response = await fetch(`${API_BASE_URL}/eventos/`, {
+    let url = `${API_BASE_URL}/eventos/`;
+    const query: string[] = [];
+    if (params) {
+      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
+      if (params.local) query.push(`local=${encodeURIComponent(params.local)}`);
+      if (params.data) query.push(`data=${encodeURIComponent(params.data)}`);
+      if (params.morador) query.push(`morador=${encodeURIComponent(params.morador)}`);
+    }
+    if (query.length > 0) {
+      url += '?' + query.join('&');
+    }
+    const response = await fetch(url, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Token ${API_TOKEN}`,
       },
     });
-    const data = await response.json();
-    setEvents(data.map((item: any) => ({
+    const dataResp = await response.json();
+    setEvents(dataResp.map((item: any) => ({
       id: item.id,
       name: item.nome,
       location: item.local,
@@ -55,6 +71,10 @@ const EventsScreen = ({ navigation }: Props) => {
       },
     });
     setEvents(prev => prev.filter(e => e.id !== id));
+  };
+
+  const handleSearch = () => {
+    fetchEvents({ nome, local, data, morador });
   };
 
   const renderItem = ({ item }: { item: Event }) => (
@@ -84,6 +104,38 @@ const EventsScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Eventos</Text>
+      {/* Campos de busca */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Nome"
+          value={nome}
+          onChangeText={setNome}
+        />
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Local"
+          value={local}
+          onChangeText={setLocal}
+        />
+      </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Data"
+          value={data}
+          onChangeText={setData}
+        />
+        <TextInput
+          style={[styles.input, { flex: 1 }]}
+          placeholder="Morador (ID)"
+          value={morador}
+          onChangeText={setMorador}
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+          <Ionicons name="search" size={22} color="#fff" />
+        </TouchableOpacity>
+      </View>
       {loading ? (
         <ActivityIndicator size="large" color="#4B7BE5" />
       ) : (
@@ -118,6 +170,21 @@ const styles = StyleSheet.create({
     position: 'absolute', right: 20, bottom: 20,
     backgroundColor: '#0D47A1', borderRadius: 28,
     padding: 14, elevation: 4
+  },
+  input: {
+    backgroundColor: '#f0f0f0',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    fontSize: 15,
+    marginRight: 4,
+  },
+  searchButton: {
+    backgroundColor: '#4B7BE5',
+    padding: 10,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

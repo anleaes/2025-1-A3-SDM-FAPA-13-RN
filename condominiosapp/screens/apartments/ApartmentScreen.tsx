@@ -2,7 +2,7 @@ import { API_BASE_URL, API_TOKEN } from '../../apiConfig';
 import { DrawerScreenProps } from '@react-navigation/drawer';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useCallback, useState } from 'react';
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerParamList } from '../../navigation/DrawerNavigator';
 
@@ -21,10 +21,23 @@ const ApartmentScreen = ({ navigation }: Props) => {
 
     const [apartamentos, setApartamentos] = useState<Apartamento[]>([]);
     const [loading, setLoading] = useState(true);
+    const [numero, setNumero] = useState('');
+    const [andar, setAndar] = useState('');
+    const [bloco, setBloco] = useState('');
 
-    const fetchApartamentos = async () => {
+    const fetchApartamentos = async (params?: { numero?: string; andar?: string; bloco?: string }) => {
         setLoading(true);
-        const response = await fetch(`${API_BASE_URL}/apartamentos/`, {
+        let url = `${API_BASE_URL}/apartamentos/`;
+        const query: string[] = [];
+        if (params) {
+            if (params.numero) query.push(`numero=${encodeURIComponent(params.numero)}`);
+            if (params.andar) query.push(`andar=${encodeURIComponent(params.andar)}`);
+            if (params.bloco) query.push(`bloco=${encodeURIComponent(params.bloco)}`);
+        }
+        if (query.length > 0) {
+            url += '?' + query.join('&');
+        }
+        const response = await fetch(url, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -49,6 +62,11 @@ const ApartmentScreen = ({ navigation }: Props) => {
             },
         });
         setApartamentos(prev => prev.filter(a => a.id !== id));
+    };
+
+    const handleSearch = () => {
+        fetchApartamentos({ numero, andar, bloco });
+        Keyboard.dismiss();
     };
 
     const renderItem = ({ item }: { item: Apartamento }) => (
@@ -76,8 +94,35 @@ const ApartmentScreen = ({ navigation }: Props) => {
     );
 
     return (
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
             <Text style={styles.title}>Apartamentos</Text>
+            <View style={styles.searchContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="Número"
+                    value={numero}
+                    onChangeText={setNumero}
+                    keyboardType="default"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Andar"
+                    value={andar}
+                    onChangeText={setAndar}
+                    keyboardType="numeric"
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Bloco"
+                    value={bloco}
+                    onChangeText={setBloco}
+                    keyboardType="default"
+                />
+                <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
+                    <Ionicons name="search" size={22} color="#fff" />
+                </TouchableOpacity>
+            </View>
             {loading ? (
                 <ActivityIndicator size="large" color="#4B7BE5" />
             ) : (
@@ -95,6 +140,7 @@ const ApartmentScreen = ({ navigation }: Props) => {
                 <Ionicons name="add" size={28} color="#fff" />
             </TouchableOpacity>
         </View>
+        </TouchableWithoutFeedback>
     );
 };
 
@@ -152,6 +198,28 @@ const styles = StyleSheet.create({
     borderRadius: 28,
     padding: 14,
     elevation: 4,
+  },
+  searchContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+    gap: 6,
+  },
+  input: {
+    flex: 1,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    fontSize: 15,
+    marginRight: 4,
+  },
+  searchButton: {
+    backgroundColor: '#4B7BE5',
+    padding: 10,
+    borderRadius: 6,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
