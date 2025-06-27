@@ -19,18 +19,17 @@ type Props = DrawerScreenProps<DrawerParamList, 'EditBlock'> & {
 
 type Condominio = {
   id: number;
-  nome: string;
+  name: string;
 };
 
 const EditBlockScreen = ({ route, navigation }: Props) => {
+  const { id, nome: nameInit, numero: numberInit, qtd_apartamentos: apartmentsCountInit, condominio: condominiumInit } = route.params;
 
-  const { id, nome: nomeInit, numero: numeroInit, qtd_apartamentos: qtdInit, condominio: condominioInit } = route.params;
-
-  const [nome, setNome] = useState(nomeInit || '');
-  const [numero, setNumero] = useState(String(numeroInit));
-  const [qtdApartamentos, setQtdApartamentos] = useState(String(qtdInit));
-  const [condominioId, setCondominioId] = useState<number | null>(condominioInit);
-  const [condominios, setCondominios] = useState<Condominio[]>([]);
+  const [name, setName] = useState(nameInit || '');
+  const [number, setNumber] = useState(String(numberInit));
+  const [apartmentsCount, setApartmentsCount] = useState(String(apartmentsCountInit));
+  const [condominiumId, setCondominiumId] = useState<number | null>(condominiumInit);
+  const [condominiums, setCondominiums] = useState<Condominio[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
@@ -43,7 +42,7 @@ const EditBlockScreen = ({ route, navigation }: Props) => {
       },
     });
     const data = await res.json();
-    setCondominios(data);
+    setCondominiums(data.map((item: any) => ({ id: item.id, name: item.nome })));
     setLoading(false);
   };
 
@@ -52,10 +51,10 @@ const EditBlockScreen = ({ route, navigation }: Props) => {
   }, []);
 
   useEffect(() => {
-    setNome(route.params.nome);
-    setNumero(String(route.params.numero));
-    setQtdApartamentos(String(route.params.qtd_apartamentos));
-    setCondominioId(route.params.condominio);
+    setName(route.params.nome);
+    setNumber(String(route.params.numero));
+    setApartmentsCount(String(route.params.qtd_apartamentos));
+    setCondominiumId(route.params.condominio);
   }, [route.params]);
 
   const handleSave = async () => {
@@ -67,10 +66,10 @@ const EditBlockScreen = ({ route, navigation }: Props) => {
         'Authorization': `Token ${API_TOKEN}`,
       },
       body: JSON.stringify({
-        nome,
-        numero: Number(numero),
-        qtd_apartamentos: Number(qtdApartamentos),
-        condominio: condominioId
+        nome: name,
+        numero: Number(number),
+        qtd_apartamentos: Number(apartmentsCount),
+        condominio: condominiumId
       }),
     });
     navigation.navigate('Blocks');
@@ -83,17 +82,17 @@ const EditBlockScreen = ({ route, navigation }: Props) => {
     <View style={styles.container}>
       <Text style={styles.title}>Editar Bloco</Text>
       <Text style={styles.label}>Nome do Bloco</Text>
-      <TextInput placeholder="Nome" style={styles.input} value={nome} onChangeText={setNome} />
+      <TextInput placeholder="Nome" style={styles.input} value={name} onChangeText={setName} />
       <Text style={styles.label}>Número</Text>
-      <TextInput placeholder="Número" style={styles.input} keyboardType="numeric" value={numero} onChangeText={setNumero} />
+      <TextInput placeholder="Número" style={styles.input} keyboardType="numeric" value={number} onChangeText={setNumber} />
       <Text style={styles.label}>Qtd. Apartamentos</Text>
-      <TextInput placeholder="Qtd. Apartamentos" style={styles.input} keyboardType="numeric" value={qtdApartamentos} onChangeText={setQtdApartamentos} />
+      <TextInput placeholder="Qtd. Apartamentos" style={styles.input} keyboardType="numeric" value={apartmentsCount} onChangeText={setApartmentsCount} />
 
       <Text style={styles.label}>Condomínio</Text>
-      <Picker selectedValue={condominioId} onValueChange={(itemValue: number | null) => setCondominioId(itemValue)}>
+      <Picker selectedValue={condominiumId} onValueChange={(itemValue: number | null) => setCondominiumId(itemValue)}>
         <Picker.Item label="Selecione..." value={null} />
-        {condominios.map(c => (
-          <Picker.Item key={c.id} label={c.nome} value={c.id} />
+        {condominiums.map(c => (
+          <Picker.Item key={c.id} label={c.name} value={c.id} />
         ))}
       </Picker>
 

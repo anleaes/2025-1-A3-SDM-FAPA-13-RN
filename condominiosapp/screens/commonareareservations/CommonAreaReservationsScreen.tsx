@@ -19,21 +19,20 @@ type CommonAreaReservation = {
 const CommonAreaReservationsScreen = ({ navigation }: Props) => {
   const [reservations, setReservations] = useState<CommonAreaReservation[]>([]);
   const [loading, setLoading] = useState(true);
-  // Novos estados para filtros
-  const [dataReserva, setDataReserva] = useState('');
+  const [reservationDate, setReservationDate] = useState('');
   const [status, setStatus] = useState('');
-  const [morador, setMorador] = useState('');
-  const [areaComum, setAreaComum] = useState('');
+  const [resident, setResident] = useState('');
+  const [commonArea, setCommonArea] = useState('');
 
-  const fetchReservations = async (params?: { data_reserva?: string; status?: string; morador?: string; area_comum?: string }) => {
+  const fetchReservations = async (params?: { reservationDate?: string; status?: string; resident?: string; commonArea?: string }) => {
     setLoading(true);
     let url = `${API_BASE_URL}/reservas/`;
     const query: string[] = [];
     if (params) {
-      if (params.data_reserva) query.push(`data_reserva=${encodeURIComponent(params.data_reserva)}`);
+      if (params.reservationDate) query.push(`data_reserva=${encodeURIComponent(params.reservationDate)}`);
       if (params.status) query.push(`status=${encodeURIComponent(params.status)}`);
-      if (params.morador) query.push(`morador=${encodeURIComponent(params.morador)}`);
-      if (params.area_comum) query.push(`area_comum=${encodeURIComponent(params.area_comum)}`);
+      if (params.resident) query.push(`morador=${encodeURIComponent(params.resident)}`);
+      if (params.commonArea) query.push(`area_comum=${encodeURIComponent(params.commonArea)}`);
     }
     if (query.length > 0) {
       url += '?' + query.join('&');
@@ -72,7 +71,7 @@ const CommonAreaReservationsScreen = ({ navigation }: Props) => {
   };
 
   const handleSearch = () => {
-    fetchReservations({ data_reserva: dataReserva, status, morador, area_comum: areaComum });
+    fetchReservations({ reservationDate, status, resident, commonArea });
   };
 
   const renderItem = ({ item }: { item: CommonAreaReservation }) => (
@@ -107,8 +106,8 @@ const CommonAreaReservationsScreen = ({ navigation }: Props) => {
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Data da Reserva"
-          value={dataReserva}
-          onChangeText={setDataReserva}
+          value={reservationDate}
+          onChangeText={setReservationDate}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
@@ -121,14 +120,14 @@ const CommonAreaReservationsScreen = ({ navigation }: Props) => {
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Morador (ID)"
-          value={morador}
-          onChangeText={setMorador}
+          value={resident}
+          onChangeText={setResident}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Área Comum (ID)"
-          value={areaComum}
-          onChangeText={setAreaComum}
+          value={commonArea}
+          onChangeText={setCommonArea}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Ionicons name="search" size={22} color="#fff" />

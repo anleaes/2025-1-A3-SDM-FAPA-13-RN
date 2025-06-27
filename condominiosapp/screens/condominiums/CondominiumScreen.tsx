@@ -19,15 +19,15 @@ type Condominium = {
 const CondominiumScreen = ({ navigation }: Props) => {
   const [condominiums, setCondominiums] = useState<Condominium[]>([]);
   const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState('');
+  const [name, setName] = useState('');
   const [cnpj, setCnpj] = useState('');
 
-  const fetchCondominiums = async (params?: { nome?: string; cnpj?: string }) => {
+  const fetchCondominiums = async (params?: { name?: string; cnpj?: string }) => {
     setLoading(true);
     let url = `${API_BASE_URL}/condominio/`;
     const query: string[] = [];
     if (params) {
-      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
+      if (params.name) query.push(`nome=${encodeURIComponent(params.name)}`);
       if (params.cnpj) query.push(`cnpj=${encodeURIComponent(params.cnpj)}`);
     }
     if (query.length > 0) {
@@ -78,7 +78,7 @@ const CondominiumScreen = ({ navigation }: Props) => {
   };
 
   const handleSearch = () => {
-    fetchCondominiums({ nome, cnpj });
+    fetchCondominiums({ name, cnpj });
     Keyboard.dismiss();
   };
 
@@ -119,8 +119,8 @@ const CondominiumScreen = ({ navigation }: Props) => {
         <TextInput
           style={styles.input}
           placeholder="Nome"
-          value={nome}
-          onChangeText={setNome}
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           style={styles.input}

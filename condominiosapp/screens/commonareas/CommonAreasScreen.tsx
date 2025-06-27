@@ -20,18 +20,18 @@ type CommonArea = {
 const CommonAreasScreen = ({ navigation }: Props) => {
   const [areas, setAreas] = useState<CommonArea[]>([]);
   const [loading, setLoading] = useState(true);
-  const [nome, setNome] = useState('');
-  const [capacidade, setCapacidade] = useState('');
-  const [condominio, setCondominio] = useState('');
+  const [name, setName] = useState('');
+  const [capacity, setCapacity] = useState('');
+  const [condominium, setCondominium] = useState('');
 
-  const fetchAreas = async (params?: { nome?: string; capacidade?: string; condominio?: string }) => {
+  const fetchAreas = async (params?: { name?: string; capacity?: string; condominium?: string }) => {
     setLoading(true);
     let url = `${API_BASE_URL}/areascomuns/`;
     const query: string[] = [];
     if (params) {
-      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
-      if (params.capacidade) query.push(`capacidade=${encodeURIComponent(params.capacidade)}`);
-      if (params.condominio) query.push(`condominio=${encodeURIComponent(params.condominio)}`);
+      if (params.name) query.push(`nome=${encodeURIComponent(params.name)}`);
+      if (params.capacity) query.push(`capacidade=${encodeURIComponent(params.capacity)}`);
+      if (params.condominium) query.push(`condominio=${encodeURIComponent(params.condominium)}`);
     }
     if (query.length > 0) {
       url += '?' + query.join('&');
@@ -71,7 +71,7 @@ const CommonAreasScreen = ({ navigation }: Props) => {
   };
 
   const handleSearch = () => {
-    fetchAreas({ nome, capacidade, condominio });
+    fetchAreas({ name, capacity, condominium });
     Keyboard.dismiss();
   };
 
@@ -107,21 +107,21 @@ const CommonAreasScreen = ({ navigation }: Props) => {
         <TextInput
           style={styles.input}
           placeholder="Nome"
-          value={nome}
-          onChangeText={setNome}
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           style={styles.input}
           placeholder="Capacidade"
-          value={capacidade}
-          onChangeText={setCapacidade}
+          value={capacity}
+          onChangeText={setCapacity}
           keyboardType="numeric"
         />
         <TextInput
           style={styles.input}
           placeholder="Condomínio"
-          value={condominio}
-          onChangeText={setCondominio}
+          value={condominium}
+          onChangeText={setCondominium}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Ionicons name="search" size={22} color="#fff" />

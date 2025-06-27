@@ -20,21 +20,20 @@ type Employee = {
 const EmployeeScreen = ({ navigation }: Props) => {
   const [employees, setEmployees] = useState<Employee[]>([]);
   const [loading, setLoading] = useState(true);
-  // Novos estados para filtros
-  const [nome, setNome] = useState('');
-  const [funcao, setFuncao] = useState('');
-  const [turno, setTurno] = useState('');
-  const [condominio, setCondominio] = useState('');
+  const [name, setName] = useState('');
+  const [role, setRole] = useState('');
+  const [shift, setShift] = useState('');
+  const [condominium, setCondominium] = useState('');
 
-  const fetchEmployees = async (params?: { nome?: string; funcao?: string; turno?: string; condominio?: string }) => {
+  const fetchEmployees = async (params?: { name?: string; role?: string; shift?: string; condominium?: string }) => {
     setLoading(true);
     let url = `${API_BASE_URL}/funcionarios/`;
     const query: string[] = [];
     if (params) {
-      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
-      if (params.funcao) query.push(`funcao=${encodeURIComponent(params.funcao)}`);
-      if (params.turno) query.push(`turno=${encodeURIComponent(params.turno)}`);
-      if (params.condominio) query.push(`condominio=${encodeURIComponent(params.condominio)}`);
+      if (params.name) query.push(`nome=${encodeURIComponent(params.name)}`);
+      if (params.role) query.push(`funcao=${encodeURIComponent(params.role)}`);
+      if (params.shift) query.push(`turno=${encodeURIComponent(params.shift)}`);
+      if (params.condominium) query.push(`condominio=${encodeURIComponent(params.condominium)}`);
     }
     if (query.length > 0) {
       url += '?' + query.join('&');
@@ -74,7 +73,7 @@ const EmployeeScreen = ({ navigation }: Props) => {
   };
 
   const handleSearch = () => {
-    fetchEmployees({ nome, funcao, turno, condominio });
+    fetchEmployees({ name, role, shift, condominium });
   };
 
   const renderItem = ({ item }: { item: Employee }) => (
@@ -109,28 +108,28 @@ const EmployeeScreen = ({ navigation }: Props) => {
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Nome"
-          value={nome}
-          onChangeText={setNome}
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Função"
-          value={funcao}
-          onChangeText={setFuncao}
+          value={role}
+          onChangeText={setRole}
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Turno"
-          value={turno}
-          onChangeText={setTurno}
+          value={shift}
+          onChangeText={setShift}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Condomínio (ID)"
-          value={condominio}
-          onChangeText={setCondominio}
+          value={condominium}
+          onChangeText={setCondominium}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Ionicons name="search" size={22} color="#fff" />

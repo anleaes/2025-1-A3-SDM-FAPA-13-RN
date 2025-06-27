@@ -20,21 +20,20 @@ type Maintenance = {
 const MaintenancesScreen = ({ navigation }: Props) => {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [loading, setLoading] = useState(true);
-  // Novos estados para filtros
-  const [descricao, setDescricao] = useState('');
-  const [data, setData] = useState('');
+  const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
   const [status, setStatus] = useState('');
-  const [condominio, setCondominio] = useState('');
+  const [condominium, setCondominium] = useState('');
 
-  const fetchMaintenances = async (params?: { descricao?: string; data?: string; status?: string; condominio?: string }) => {
+  const fetchMaintenances = async (params?: { description?: string; date?: string; status?: string; condominium?: string }) => {
     setLoading(true);
     let url = `${API_BASE_URL}/manutencoes/`;
     const query: string[] = [];
     if (params) {
-      if (params.descricao) query.push(`descricao=${encodeURIComponent(params.descricao)}`);
-      if (params.data) query.push(`data=${encodeURIComponent(params.data)}`);
+      if (params.description) query.push(`descricao=${encodeURIComponent(params.description)}`);
+      if (params.date) query.push(`data=${encodeURIComponent(params.date)}`);
       if (params.status) query.push(`status=${encodeURIComponent(params.status)}`);
-      if (params.condominio) query.push(`condominio=${encodeURIComponent(params.condominio)}`);
+      if (params.condominium) query.push(`condominio=${encodeURIComponent(params.condominium)}`);
     }
     if (query.length > 0) {
       url += '?' + query.join('&');
@@ -74,7 +73,7 @@ const MaintenancesScreen = ({ navigation }: Props) => {
   };
 
   const handleSearch = () => {
-    fetchMaintenances({ descricao, data, status, condominio });
+    fetchMaintenances({ description, date, status, condominium });
   };
 
   const renderItem = ({ item }: { item: Maintenance }) => (
@@ -110,14 +109,14 @@ const MaintenancesScreen = ({ navigation }: Props) => {
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Descrição"
-          value={descricao}
-          onChangeText={setDescricao}
+          value={description}
+          onChangeText={setDescription}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Data"
-          value={data}
-          onChangeText={setData}
+          value={date}
+          onChangeText={setDate}
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
@@ -130,8 +129,8 @@ const MaintenancesScreen = ({ navigation }: Props) => {
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Condomínio (ID)"
-          value={condominio}
-          onChangeText={setCondominio}
+          value={condominium}
+          onChangeText={setCondominium}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Ionicons name="search" size={22} color="#fff" />
