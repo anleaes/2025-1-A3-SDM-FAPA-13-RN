@@ -20,21 +20,20 @@ type Event = {
 const EventsScreen = ({ navigation }: Props) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
-  // Novos estados para filtros
-  const [nome, setNome] = useState('');
-  const [local, setLocal] = useState('');
-  const [data, setData] = useState('');
-  const [morador, setMorador] = useState('');
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
+  const [date, setDate] = useState('');
+  const [resident, setResident] = useState('');
 
-  const fetchEvents = async (params?: { nome?: string; local?: string; data?: string; morador?: string }) => {
+  const fetchEvents = async (params?: { name?: string; location?: string; date?: string; resident?: string }) => {
     setLoading(true);
     let url = `${API_BASE_URL}/eventos/`;
     const query: string[] = [];
     if (params) {
-      if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
-      if (params.local) query.push(`local=${encodeURIComponent(params.local)}`);
-      if (params.data) query.push(`data=${encodeURIComponent(params.data)}`);
-      if (params.morador) query.push(`morador=${encodeURIComponent(params.morador)}`);
+      if (params.name) query.push(`nome=${encodeURIComponent(params.name)}`);
+      if (params.location) query.push(`local=${encodeURIComponent(params.location)}`);
+      if (params.date) query.push(`data=${encodeURIComponent(params.date)}`);
+      if (params.resident) query.push(`morador=${encodeURIComponent(params.resident)}`);
     }
     if (query.length > 0) {
       url += '?' + query.join('&');
@@ -74,7 +73,7 @@ const EventsScreen = ({ navigation }: Props) => {
   };
 
   const handleSearch = () => {
-    fetchEvents({ nome, local, data, morador });
+    fetchEvents({ name, location, date, resident });
   };
 
   const renderItem = ({ item }: { item: Event }) => (
@@ -109,28 +108,28 @@ const EventsScreen = ({ navigation }: Props) => {
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Nome"
-          value={nome}
-          onChangeText={setNome}
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Local"
-          value={local}
-          onChangeText={setLocal}
+          value={location}
+          onChangeText={setLocation}
         />
       </View>
       <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 12, gap: 6 }}>
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Data"
-          value={data}
-          onChangeText={setData}
+          value={date}
+          onChangeText={setDate}
         />
         <TextInput
           style={[styles.input, { flex: 1 }]}
           placeholder="Morador (ID)"
-          value={morador}
-          onChangeText={setMorador}
+          value={resident}
+          onChangeText={setResident}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
           <Ionicons name="search" size={22} color="#fff" />

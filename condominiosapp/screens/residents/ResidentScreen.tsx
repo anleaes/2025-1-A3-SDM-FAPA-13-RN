@@ -21,20 +21,19 @@ type Props = DrawerScreenProps<DrawerParamList, 'Residents'>;
 const ResidentScreen = ({ navigation }: Props) => {
     const [residents, setResidents] = useState<Resident[]>([]);
     const [loading, setLoading] = useState(true);
-    // Novos estados para filtros
-    const [nome, setNome] = useState('');
+    const [name, setName] = useState('');
     const [cpf, setCpf] = useState('');
-    const [apartamento, setApartamento] = useState('');
+    const [apartment, setApartment] = useState('');
 
-    const fetchResidents = async (params?: { nome?: string; cpf?: string; apartamento?: string }) => {
+    const fetchResidents = async (params?: { name?: string; cpf?: string; apartment?: string }) => {
         setLoading(true);
         try {
             let url = `${API_BASE_URL}/moradores/`;
             const query: string[] = [];
             if (params) {
-                if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
+                if (params.name) query.push(`nome=${encodeURIComponent(params.name)}`);
                 if (params.cpf) query.push(`cpf=${encodeURIComponent(params.cpf)}`);
-                if (params.apartamento) query.push(`apartamento=${encodeURIComponent(params.apartamento)}`);
+                if (params.apartment) query.push(`apartamento=${encodeURIComponent(params.apartment)}`);
             }
             if (query.length > 0) {
                 url += '?' + query.join('&');
@@ -86,7 +85,7 @@ const ResidentScreen = ({ navigation }: Props) => {
     };
 
     const handleSearch = () => {
-        fetchResidents({ nome, cpf, apartamento });
+        fetchResidents({ name, cpf, apartment });
     };
 
     const renderItem = ({ item }: { item: Resident }) => (
@@ -121,8 +120,8 @@ const ResidentScreen = ({ navigation }: Props) => {
                 <TextInput
                     style={[styles.input, { flex: 1 }]}
                     placeholder="Nome"
-                    value={nome}
-                    onChangeText={setNome}
+                    value={name}
+                    onChangeText={setName}
                 />
                 <TextInput
                     style={[styles.input, { flex: 1 }]}
@@ -133,8 +132,8 @@ const ResidentScreen = ({ navigation }: Props) => {
                 <TextInput
                     style={[styles.input, { flex: 1 }]}
                     placeholder="Apartamento (ID)"
-                    value={apartamento}
-                    onChangeText={setApartamento}
+                    value={apartment}
+                    onChangeText={setApartment}
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
                     <Ionicons name="search" size={22} color="#fff" />

@@ -13,19 +13,18 @@ type Bloco = {
 };
 
 const EditApartmentScreen = ({ route, navigation }: Props) => {
+    const { id, numero: numberInit, andar: floorInit, metragem: areaInit, vagas_garagem: garageSpotsInit, bloco: blockInit } = route.params;
 
-    const { id, numero: numeroInit, andar: andarInit, metragem: metragemInit, vagas_garagem: vagasInit, bloco: blocoInit } = route.params;
-
-    const [numero, setNumero] = useState(numeroInit);
-    const [andar, setAndar] = useState(String(andarInit));
-    const [metragem, setMetragem] = useState(String(metragemInit));
-    const [vagasGaragem, setVagasGaragem] = useState(String(vagasInit));
-    const [blocoId, setBlocoId] = useState<number | null>(blocoInit);
-    const [blocos, setBlocos] = useState<Bloco[]>([]);
+    const [number, setNumber] = useState(numberInit);
+    const [floor, setFloor] = useState(String(floorInit));
+    const [area, setArea] = useState(String(areaInit));
+    const [garageSpots, setGarageSpots] = useState(String(garageSpotsInit));
+    const [blockId, setBlockId] = useState<number | null>(blockInit);
+    const [blocks, setBlocks] = useState<Bloco[]>([]);
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
 
-    const fetchBlocos = async () => {
+    const fetchBlocks = async () => {
         const res = await fetch(`${API_BASE_URL}/blocos/`, {
             method: 'GET',
             headers: {
@@ -34,20 +33,20 @@ const EditApartmentScreen = ({ route, navigation }: Props) => {
             },
         });
         const data = await res.json();
-        setBlocos(data);
+        setBlocks(data);
         setLoading(false);
     };
 
     useEffect(() => {
-        fetchBlocos();
+        fetchBlocks();
     }, []);
 
     useEffect(() => {
-        setNumero(route.params.numero);
-        setAndar(String(route.params.andar));
-        setMetragem(String(route.params.metragem));
-        setVagasGaragem(String(route.params.vagas_garagem));
-        setBlocoId(route.params.bloco);
+        setNumber(route.params.numero);
+        setFloor(String(route.params.andar));
+        setArea(String(route.params.metragem));
+        setGarageSpots(String(route.params.vagas_garagem));
+        setBlockId(route.params.bloco);
     }, [route.params]);
 
     const handleSave = async () => {
@@ -59,11 +58,11 @@ const EditApartmentScreen = ({ route, navigation }: Props) => {
                 'Authorization': `Token ${API_TOKEN}`,
             },
             body: JSON.stringify({
-                numero,
-                andar: Number(andar),
-                metragem: Number(metragem),
-                vagas_garagem: Number(vagasGaragem),
-                bloco: blocoId
+                numero: number,
+                andar: Number(floor),
+                metragem: Number(area),
+                vagas_garagem: Number(garageSpots),
+                bloco: blockId
             }),
         });
         navigation.navigate('Apartments');
@@ -75,15 +74,15 @@ const EditApartmentScreen = ({ route, navigation }: Props) => {
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Editar Apartamento</Text>
-            <TextInput placeholder="Número" style={styles.input} value={numero} onChangeText={setNumero} />
-            <TextInput placeholder="Andar" style={styles.input} keyboardType="numeric" value={andar} onChangeText={setAndar} />
-            <TextInput placeholder="Metragem (m²)" style={styles.input} keyboardType="numeric" value={metragem} onChangeText={setMetragem} />
-            <TextInput placeholder="Vagas Garagem" style={styles.input} keyboardType="numeric" value={vagasGaragem} onChangeText={setVagasGaragem} />
+            <TextInput placeholder="Número" style={styles.input} value={number} onChangeText={setNumber} />
+            <TextInput placeholder="Andar" style={styles.input} keyboardType="numeric" value={floor} onChangeText={setFloor} />
+            <TextInput placeholder="Metragem (m²)" style={styles.input} keyboardType="numeric" value={area} onChangeText={setArea} />
+            <TextInput placeholder="Vagas Garagem" style={styles.input} keyboardType="numeric" value={garageSpots} onChangeText={setGarageSpots} />
 
             <Text style={styles.label}>Bloco</Text>
-            <Picker selectedValue={blocoId} onValueChange={(itemValue: number | null) => setBlocoId(itemValue)}>
+            <Picker selectedValue={blockId} onValueChange={(itemValue: number | null) => setBlockId(itemValue)}>
                 <Picker.Item label="Selecione..." value={null} />
-                {blocos.map(b => (
+                {blocks.map(b => (
                     <Picker.Item key={b.id} label={`Bloco ${b.numero}`} value={b.id} />
                 ))}
             </Picker>

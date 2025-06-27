@@ -9,7 +9,7 @@ type Props = DrawerScreenProps<DrawerParamList, 'CreateCommonArea'>;
 
 type Condominium = {
   id: number;
-  nome: string;
+  name: string;
 };
 
 const CreateCommonAreaScreen = ({ navigation }: Props) => {
@@ -31,7 +31,7 @@ const CreateCommonAreaScreen = ({ navigation }: Props) => {
       },
     });
     const data = await res.json();
-    setCondominiums(data);
+    setCondominiums(data.map((item: any) => ({ id: item.id, name: item.nome })));
     setLoading(false);
   };
 
@@ -72,7 +72,7 @@ const CreateCommonAreaScreen = ({ navigation }: Props) => {
       <Picker selectedValue={condominiumId} onValueChange={(itemValue) => setCondominiumId(itemValue)}>
         <Picker.Item label="Selecione..." value={null} />
         {condominiums.map(c => (
-          <Picker.Item key={c.id} label={c.nome} value={c.id} />
+          <Picker.Item key={c.id} label={c.name} value={c.id} />
         ))}
       </Picker>
       {saving ? (

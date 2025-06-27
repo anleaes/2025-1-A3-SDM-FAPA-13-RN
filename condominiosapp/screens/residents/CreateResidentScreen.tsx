@@ -60,15 +60,15 @@ const CreateResidentScreen = ({ navigation }: Props) => {
                 },
                 body: JSON.stringify({
                     nome: name,
-                    cpf: cpf,
                     telefone: phone,
                     email: email,
+                    cpf: cpf,
                     apartamento: apartmentId,
                 }),
             });
             navigation.navigate('Residents');
         } catch (error) {
-            Alert.alert('Error', 'Failed to create resident.');
+            Alert.alert('Error', 'Failed to save resident.');
         } finally {
             setSaving(false);
         }

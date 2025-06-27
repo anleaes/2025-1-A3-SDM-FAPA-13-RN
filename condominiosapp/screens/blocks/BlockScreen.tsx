@@ -10,30 +10,30 @@ type Props = DrawerScreenProps<DrawerParamList, 'Blocks'>;
 
 type Block = {
     id: number;
-    nome: string;
-    numero: number;
-    qtd_apartamentos: number;
-    condominio: number;
+    name: string;
+    number: number;
+    apartmentsCount: number;
+    condominium: number;
 };
 
 const BlockScreen = ({ navigation }: Props) => {
 
     const [blocks, setBlocks] = useState<Block[]>([]);
     const [loading, setLoading] = useState(true);
-    const [nome, setNome] = useState('');
-    const [numero, setNumero] = useState('');
-    const [qtd_apartamentos, setQtdApartamentos] = useState('');
-    const [condominio, setCondominio] = useState('');
+    const [name, setName] = useState('');
+    const [number, setNumber] = useState('');
+    const [apartmentsCount, setApartmentsCount] = useState('');
+    const [condominium, setCondominium] = useState('');
 
-    const fetchBlocks = async (params?: { nome?: string; numero?: string; qtd_apartamentos?: string; condominio?: string }) => {
+    const fetchBlocks = async (params?: { name?: string; number?: string; apartmentsCount?: string; condominium?: string }) => {
         setLoading(true);
         let url = `${API_BASE_URL}/blocos/`;
         const query: string[] = [];
         if (params) {
-            if (params.nome) query.push(`nome=${encodeURIComponent(params.nome)}`);
-            if (params.numero) query.push(`numero=${encodeURIComponent(params.numero)}`);
-            if (params.qtd_apartamentos) query.push(`qtd_apartamentos=${encodeURIComponent(params.qtd_apartamentos)}`);
-            if (params.condominio) query.push(`condominio=${encodeURIComponent(params.condominio)}`);
+            if (params.name) query.push(`nome=${encodeURIComponent(params.name)}`);
+            if (params.number) query.push(`numero=${encodeURIComponent(params.number)}`);
+            if (params.apartmentsCount) query.push(`qtd_apartamentos=${encodeURIComponent(params.apartmentsCount)}`);
+            if (params.condominium) query.push(`condominio=${encodeURIComponent(params.condominium)}`);
         }
         if (query.length > 0) {
             url += '?' + query.join('&');
@@ -46,7 +46,13 @@ const BlockScreen = ({ navigation }: Props) => {
             },
         });
         const data = await response.json();
-        setBlocks(data);
+        setBlocks(data.map((item: any) => ({
+            id: item.id,
+            name: item.nome,
+            number: item.numero,
+            apartmentsCount: item.qtd_apartamentos,
+            condominium: item.condominio
+        })));
         setLoading(false);
     };
 
@@ -55,7 +61,7 @@ const BlockScreen = ({ navigation }: Props) => {
     }, []));
 
     const handleSearch = () => {
-        fetchBlocks({ nome, numero, qtd_apartamentos, condominio });
+        fetchBlocks({ name, number, apartmentsCount, condominium });
         Keyboard.dismiss();
     };
 
@@ -72,13 +78,19 @@ const BlockScreen = ({ navigation }: Props) => {
 
     const renderItem = ({ item }: { item: Block }) => (
         <View style={styles.card}>
-            <Text style={styles.name}>{item.nome}</Text>
-            <Text style={styles.description}>Apartamentos: {item.qtd_apartamentos}</Text>
-            <Text style={styles.description}>Condomínio ID: {item.condominio}</Text>
+            <Text style={styles.name}>{item.name}</Text>
+            <Text style={styles.description}>Apartamentos: {item.apartmentsCount}</Text>
+            <Text style={styles.description}>Condomínio ID: {item.condominium}</Text>
             <View style={styles.row}>
                 <TouchableOpacity
                     style={styles.editButton}
-                    onPress={() => navigation.navigate('EditBlock', item)}
+                    onPress={() => navigation.navigate('EditBlock', {
+                        id: item.id,
+                        nome: item.name,
+                        numero: item.number,
+                        qtd_apartamentos: item.apartmentsCount,
+                        condominio: item.condominium
+                    })}
                 >
                     <Text style={styles.editText}>Editar</Text>
                 </TouchableOpacity>
@@ -100,28 +112,28 @@ const BlockScreen = ({ navigation }: Props) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Nome"
-                    value={nome}
-                    onChangeText={setNome}
+                    value={name}
+                    onChangeText={setName}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Número"
-                    value={numero}
-                    onChangeText={setNumero}
+                    value={number}
+                    onChangeText={setNumber}
                     keyboardType="default"
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Qtd. Aptos"
-                    value={qtd_apartamentos}
-                    onChangeText={setQtdApartamentos}
+                    value={apartmentsCount}
+                    onChangeText={setApartmentsCount}
                     keyboardType="numeric"
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Condomínio"
-                    value={condominio}
-                    onChangeText={setCondominio}
+                    value={condominium}
+                    onChangeText={setCondominium}
                     keyboardType="default"
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>

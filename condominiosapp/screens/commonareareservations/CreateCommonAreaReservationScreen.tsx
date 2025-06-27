@@ -63,7 +63,7 @@ const CreateCommonAreaReservationScreen = ({ navigation }: Props) => {
       },
       body: JSON.stringify({
         data_reserva: reservationDate,
-        status,
+        status: status,
         morador: residentId,
         area_comum: commonAreaId,
       }),

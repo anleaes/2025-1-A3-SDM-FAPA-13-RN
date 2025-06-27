@@ -70,9 +70,9 @@ const EditResidentScreen = ({ route, navigation }: Props) => {
                 },
                 body: JSON.stringify({
                     nome: name,
-                    cpf: cpf,
                     telefone: phone,
                     email: email,
+                    cpf: cpf,
                     apartamento: apartmentId,
                 }),
             });

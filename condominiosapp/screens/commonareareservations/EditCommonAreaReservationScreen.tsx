@@ -9,12 +9,12 @@ type Props = DrawerScreenProps<DrawerParamList, 'EditCommonAreaReservation'>;
 
 type Resident = {
   id: number;
-  nome: string;
+  name: string;
 };
 
 type CommonArea = {
   id: number;
-  nome: string;
+  name: string;
 };
 
 const EditCommonAreaReservationScreen = ({ route, navigation }: Props) => {
@@ -46,8 +46,8 @@ const EditCommonAreaReservationScreen = ({ route, navigation }: Props) => {
     });
     const residentsData = await resResidents.json();
     const areasData = await resAreas.json();
-    setResidents(residentsData);
-    setCommonAreas(areasData);
+    setResidents(residentsData.map((item: any) => ({ id: item.id, name: item.nome })));
+    setCommonAreas(areasData.map((item: any) => ({ id: item.id, name: item.nome })));
     setLoading(false);
   };
 
@@ -92,14 +92,14 @@ const EditCommonAreaReservationScreen = ({ route, navigation }: Props) => {
       <Picker selectedValue={residentId} onValueChange={(itemValue) => setResidentId(itemValue)}>
         <Picker.Item label="Selecione..." value={null} />
         {residents.map(m => (
-          <Picker.Item key={m.id} label={m.nome} value={m.id} />
+          <Picker.Item key={m.id} label={m.name} value={m.id} />
         ))}
       </Picker>
       <Text style={styles.label}>Área Comum</Text>
       <Picker selectedValue={commonAreaId} onValueChange={(itemValue) => setCommonAreaId(itemValue)}>
         <Picker.Item label="Selecione..." value={null} />
         {commonAreas.map(a => (
-          <Picker.Item key={a.id} label={a.nome} value={a.id} />
+          <Picker.Item key={a.id} label={a.name} value={a.id} />
         ))}
       </Picker>
       {saving ? (

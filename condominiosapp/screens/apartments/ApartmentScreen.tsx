@@ -8,31 +8,31 @@ import { DrawerParamList } from '../../navigation/DrawerNavigator';
 
 type Props = DrawerScreenProps<DrawerParamList, 'Apartments'>;
 
-type Apartamento = {
+type Apartment = {
     id: number;
-    numero: string;
-    andar: number;
-    metragem: number;
-    vagas_garagem: number;
-    bloco: number;
+    number: string;
+    floor: number;
+    area: number;
+    garageSpots: number;
+    block: number;
 };
 
 const ApartmentScreen = ({ navigation }: Props) => {
 
-    const [apartamentos, setApartamentos] = useState<Apartamento[]>([]);
+    const [apartments, setApartments] = useState<Apartment[]>([]);
     const [loading, setLoading] = useState(true);
-    const [numero, setNumero] = useState('');
-    const [andar, setAndar] = useState('');
-    const [bloco, setBloco] = useState('');
+    const [number, setNumber] = useState('');
+    const [floor, setFloor] = useState('');
+    const [block, setBlock] = useState('');
 
-    const fetchApartamentos = async (params?: { numero?: string; andar?: string; bloco?: string }) => {
+    const fetchApartments = async (params?: { number?: string; floor?: string; block?: string }) => {
         setLoading(true);
         let url = `${API_BASE_URL}/apartamentos/`;
         const query: string[] = [];
         if (params) {
-            if (params.numero) query.push(`numero=${encodeURIComponent(params.numero)}`);
-            if (params.andar) query.push(`andar=${encodeURIComponent(params.andar)}`);
-            if (params.bloco) query.push(`bloco=${encodeURIComponent(params.bloco)}`);
+            if (params.number) query.push(`numero=${encodeURIComponent(params.number)}`);
+            if (params.floor) query.push(`andar=${encodeURIComponent(params.floor)}`);
+            if (params.block) query.push(`bloco=${encodeURIComponent(params.block)}`);
         }
         if (query.length > 0) {
             url += '?' + query.join('&');
@@ -45,12 +45,19 @@ const ApartmentScreen = ({ navigation }: Props) => {
             },
         });
         const data = await response.json();
-        setApartamentos(data);
+        setApartments(data.map((item: any) => ({
+            id: item.id,
+            number: item.numero,
+            floor: item.andar,
+            area: item.metragem,
+            garageSpots: item.vagas_garagem,
+            block: item.bloco
+        })));
         setLoading(false);
     };
 
     useFocusEffect(useCallback(() => {
-        fetchApartamentos();
+        fetchApartments();
     }, []));
 
     const handleDelete = async (id: number) => {
@@ -61,25 +68,30 @@ const ApartmentScreen = ({ navigation }: Props) => {
                 'Authorization': `Token ${API_TOKEN}`,
             },
         });
-        setApartamentos(prev => prev.filter(a => a.id !== id));
+        setApartments(prev => prev.filter(a => a.id !== id));
     };
 
     const handleSearch = () => {
-        fetchApartamentos({ numero, andar, bloco });
+        fetchApartments({ number, floor, block });
         Keyboard.dismiss();
     };
 
-    const renderItem = ({ item }: { item: Apartamento }) => (
+    const renderItem = ({ item }: { item: Apartment }) => (
         <View style={styles.card}>
-            <Text style={styles.name}>Apt {item.numero} - Andar {item.andar}</Text>
-            <Text style={styles.description}>Metragem: {item.metragem}m²</Text>
-            <Text style={styles.description}>Vagas garagem: {item.vagas_garagem}</Text>
-            <Text style={styles.description}>Bloco ID: {item.bloco}</Text>
-
+            <Text style={styles.name}>Número: {item.number}</Text>
+            <Text style={styles.description}>Andar: {item.floor}</Text>
+            <Text style={styles.description}>Bloco: {item.block}</Text>
             <View style={styles.row}>
                 <TouchableOpacity
                     style={styles.editButton}
-                    onPress={() => navigation.navigate('EditApartment', item)}
+                    onPress={() => navigation.navigate('EditApartment', {
+                        id: item.id,
+                        numero: item.number,
+                        andar: item.floor,
+                        metragem: item.area,
+                        vagas_garagem: item.garageSpots,
+                        bloco: item.block
+                    })}
                 >
                     <Text style={styles.editText}>Editar</Text>
                 </TouchableOpacity>
@@ -101,22 +113,22 @@ const ApartmentScreen = ({ navigation }: Props) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Número"
-                    value={numero}
-                    onChangeText={setNumero}
+                    value={number}
+                    onChangeText={setNumber}
                     keyboardType="default"
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Andar"
-                    value={andar}
-                    onChangeText={setAndar}
+                    value={floor}
+                    onChangeText={setFloor}
                     keyboardType="numeric"
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Bloco"
-                    value={bloco}
-                    onChangeText={setBloco}
+                    value={block}
+                    onChangeText={setBlock}
                     keyboardType="default"
                 />
                 <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
@@ -127,7 +139,7 @@ const ApartmentScreen = ({ navigation }: Props) => {
                 <ActivityIndicator size="large" color="#4B7BE5" />
             ) : (
                 <FlatList
-                    data={apartamentos}
+                    data={apartments}
                     keyExtractor={(item) => item.id.toString()}
                     renderItem={renderItem}
                     contentContainerStyle={{ paddingBottom: 20 }}

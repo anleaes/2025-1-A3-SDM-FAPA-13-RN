@@ -9,15 +9,14 @@ type Props = DrawerScreenProps<DrawerParamList, 'CreateBlock'>;
 
 type Condominio = {
   id: number;
-  nome: string;
+  name: string;
 };
 
 const CreateBlockScreen = ({ navigation }: Props) => {
-
-  const [nome, setNome] = useState('');
-  const [numero, setNumero] = useState('');
-  const [qtdApartamentos, setQtdApartamentos] = useState('');
-  const [condominioId, setCondominioId] = useState<number | null>(null);
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
+  const [apartmentsCount, setApartmentsCount] = useState('');
+  const [condominiumId, setCondominiumId] = useState<number | null>(null);
   const [condominios, setCondominios] = useState<Condominio[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -31,7 +30,7 @@ const CreateBlockScreen = ({ navigation }: Props) => {
       },
     });
     const data = await res.json();
-    setCondominios(data);
+    setCondominios(data.map((item: any) => ({ id: item.id, name: item.nome }))); // Map to English
     setLoading(false);
   };
 
@@ -48,10 +47,10 @@ const CreateBlockScreen = ({ navigation }: Props) => {
         'Authorization': `Token ${API_TOKEN}`,
       },
       body: JSON.stringify({
-        nome,
-        numero: Number(numero),
-        qtd_apartamentos: Number(qtdApartamentos),
-        condominio: condominioId
+        nome: name,
+        numero: Number(number),
+        qtd_apartamentos: Number(apartmentsCount),
+        condominio: condominiumId
       }),
     });
     navigation.navigate('Blocks');
@@ -64,17 +63,17 @@ const CreateBlockScreen = ({ navigation }: Props) => {
     <View style={styles.container}>
       <Text style={styles.title}>Novo Bloco</Text>
       <Text style={styles.label}>Nome do Bloco</Text>
-      <TextInput placeholder="Nome" style={styles.input} value={nome} onChangeText={setNome} />
+      <TextInput placeholder="Nome" style={styles.input} value={name} onChangeText={setName} />
       <Text style={styles.label}>Número</Text>
-      <TextInput placeholder="Número" style={styles.input} keyboardType="numeric" value={numero} onChangeText={setNumero} />
+      <TextInput placeholder="Número" style={styles.input} keyboardType="numeric" value={number} onChangeText={setNumber} />
       <Text style={styles.label}>Qtd. Apartamentos</Text>
-      <TextInput placeholder="Qtd. Apartamentos" style={styles.input} keyboardType="numeric" value={qtdApartamentos} onChangeText={setQtdApartamentos} />
+      <TextInput placeholder="Qtd. Apartamentos" style={styles.input} keyboardType="numeric" value={apartmentsCount} onChangeText={setApartmentsCount} />
 
       <Text style={styles.label}>Condomínio</Text>
-      <Picker selectedValue={condominioId} onValueChange={(itemValue: number | null) => setCondominioId(itemValue)}>
+      <Picker selectedValue={condominiumId} onValueChange={(itemValue: number | null) => setCondominiumId(itemValue)}>
         <Picker.Item label="Selecione..." value={null} />
         {condominios.map(c => (
-          <Picker.Item key={c.id} label={c.nome} value={c.id} />
+          <Picker.Item key={c.id} label={c.name} value={c.id} />
         ))}
       </Picker>
 
